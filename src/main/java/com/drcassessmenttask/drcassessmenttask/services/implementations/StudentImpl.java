@@ -28,7 +28,7 @@ public class StudentImpl implements StudentServices {
         Student student = this.modelMapper.map(studentDto, Student.class);
         Student byRollNo = studentRepo.findByRollNo(studentDto.getRollNo());
         if (byRollNo != null) {
-            throw new IllegalArgumentException("Student with this Roll Number is already registered");
+             throw new IllegalArgumentException("Student with this Roll Number is already registered");
         }
         student.setName(studentDto.getName());
         student.setRollNo(studentDto.getRollNo());
