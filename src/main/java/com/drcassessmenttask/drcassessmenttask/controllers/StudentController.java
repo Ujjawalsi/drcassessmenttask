@@ -26,14 +26,14 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<StudentDto> updateSatResult(@Valid @RequestBody StudentDto studentDto , @PathVariable Long id){
+    public  ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto , @PathVariable Long id){
 
         StudentDto updatedStudent = this.studentServices.editStudent(id, studentDto);
         return  new ResponseEntity<>(updatedStudent,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDto> getSatResult(@PathVariable Long id){
+    public ResponseEntity<StudentDto> getStudent(@PathVariable Long id){
         StudentDto result = this.studentServices.getStudent(id);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

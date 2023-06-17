@@ -20,7 +20,7 @@ public class TeacherController {
     private TeacherServices teacherServices;
 
     @PostMapping("/signup")
-    public ResponseEntity<TeacherDto> createSatResult(@Valid @RequestBody TeacherDto teacherDto){
+    public ResponseEntity<TeacherDto> createTeacher(@Valid @RequestBody TeacherDto teacherDto){
         TeacherDto resultDto = this.teacherServices.signUpTeacher(teacherDto);
         return new ResponseEntity<>(resultDto, HttpStatus.CREATED);
     }
