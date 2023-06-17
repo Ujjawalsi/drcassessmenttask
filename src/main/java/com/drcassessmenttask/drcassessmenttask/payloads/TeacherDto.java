@@ -1,6 +1,7 @@
 package com.drcassessmenttask.drcassessmenttask.payloads;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 @Getter
@@ -14,6 +15,7 @@ public class TeacherDto {
     @NotEmpty(message = "UserName never be empty")
     private String userName;
     @NotEmpty(message = "Name never be empty")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Invalid Email")
     private String email;
 
     private String password;
