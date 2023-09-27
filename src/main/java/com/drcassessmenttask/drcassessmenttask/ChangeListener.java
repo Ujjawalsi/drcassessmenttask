@@ -1,0 +1,78 @@
+package com.drcassessmenttask.drcassessmenttask;
+
+import com.impossibl.postgres.api.jdbc.PGConnection;
+import com.impossibl.postgres.api.jdbc.PGNotificationListener;
+import com.impossibl.postgres.jdbc.PGDataSource;
+
+
+import java.sql.*;
+
+public class ChangeListener {
+
+    public static void main(String[] args) {
+        String jdbcUrl = "jdbc:pgsql://localhost:5432/Learning";
+        String username = "postgres";
+        String password = "root";
+
+        PGDataSource dataSource = new PGDataSource();
+        dataSource.setUrl(jdbcUrl);
+        dataSource.setUser(username);
+        dataSource.setPassword(password);
+
+        try (Connection connection = dataSource.getConnection()) {
+            PGConnection pgConnection = connection.unwrap(PGConnection.class);
+
+            PGNotificationListener listener = new PGNotificationListener() {
+                @Override
+                public void notification(int processId, String channelName, String payload) {
+                    if ("table_changes".equals(channelName)) {
+                        System.out.println(payload);
+                    }else {
+                        throw new RuntimeException("Do not get any change");
+                    }
+                }
+            };
+
+            pgConnection.addNotificationListener(listener);
+            try (Statement stmt = connection.createStatement()) {
+                stmt.execute("LISTEN table_changes");
+            }
+
+            System.out.println("Listening for table_changes notifications...");
+
+            while (true) {
+                Thread.sleep(1000); // Sleep to avoid busy-waiting
+            }
+
+        } catch (SQLException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    private static void makeApiCall(String apiURL) {
+//        try {
+//            URL url = new URL(apiURL);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//
+//            int responseCode = connection.getResponseCode();
+//            if (responseCode == HttpURLConnection.HTTP_OK) {
+//                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//                String inputLine;
+//                StringBuilder response = new StringBuilder();
+//
+//                while ((inputLine = in.readLine()) != null) {
+//                    response.append(inputLine);
+//                }
+//                in.close();
+//
+//                System.out.println("API Response: " + response.toString());
+//                System.out.println(response);
+//            } else {
+//                System.out.println("API Call failed with response code: " + responseCode);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+}
